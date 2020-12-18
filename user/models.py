@@ -1,7 +1,22 @@
 from django.db import models
+# uuid - это 128-битное число, представленное
+# как строка utf8 из пяти шестнадцатеричных чисел.
 import uuid
 # Create your models here.
+# AbstractBaseUser импортируется для настройки пользовательской
+# модели пользователя, а BaseUserManager используется,
+# когда необходимо определить настраиваемый менеджер,
+# т.е. если мы хотим определить поля, отличные от UserManger,
+# нам нужно определить настраиваемый менеджер,
+# который расширяет BaseUserManager.
 from django.contrib.auth.models import BaseUserManager,AbstractBaseUser
+
+# мы создаем настраиваемый пользовательский менеджер,
+# расширяя BaseUserManager и предоставляя два дополнительных метода:
+# create_user () и create_superuser ()
+# create_user () и create_superuser () должны принимать поле имени пользователя
+# и другие обязательные поля в качестве аргументов.
+
 
 
 class UserManager(BaseUserManager):
@@ -12,13 +27,22 @@ class UserManager(BaseUserManager):
             raise ValueError('User must be have an email')
 
         user=self.model(
+            # self.normalize_email (email) нормализует адрес
+            # электронной почты, уменьшая регистр доменной части.
             email=self.normalize_email(email),
         )
+        # set_password (пароль) сохраняет пароль и сохраняет хеш в базе данных.
         user.set_password(password)
+        # user.save (using = self._db) сохраняет пользователя
+        # в текущей базе данных (self._db)
+        # наконец, этот метод возвращает пользователя, если он
+        # был успешно сохранен, в противном случае возникает ошибка.
         user.save(using=self._db)
         return user
 
-
+    # create_superuser () сохраняет пользователя с правами
+    # администратора, которые достигаются
+    # включением is_superuser = True и is_staff = True.
     def create_superuser(self, email,password):
 
         if password is None:
