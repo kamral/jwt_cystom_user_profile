@@ -55,18 +55,27 @@ class UserManager(BaseUserManager):
 
         return  user
 
+# класс User расширяет AbstractBaseUser
+# для создания пользователя с настраиваемыми полями.
 
 class User(AbstractBaseUser):
-
+    # Поле id используется для хранения первичного ключа в формате uuid.
     id=models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # В поле электронной почты хранится электронная почта.
     email=models.EmailField(verbose_name='email_address',
                             max_length=100,
                             unique=True)
+    # По умолчанию новый пользователь всегда должен быть активен.
+    # Пользователь может не быть администратором или сотрудником,
+    # поэтому я установил для него значение по умолчанию как False.
     is_active = models.BooleanField(default=True)
     is_staff=models.BooleanField(default=False)
     is_superuser=models.BooleanField(default=False)
 
+    # USERNAME_FIELD настроен на адрес электронной почты, поскольку он должен
+    # использоваться в качестве имени пользователя при входе в систему.
     USERNAME_FIELD='email'
+    # REQUIRED_FIELDS содержит список обязательных полей, но в нашем случае он пуст.
     REQUIRED_FIELDS = []
 
     objects=UserManager()
