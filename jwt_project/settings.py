@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'jwt_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'auth_user',
+        'USER': 'user_jwt',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1',
         'PORT': '5432',
-        'NAME': 'db_auth_user6'
+        'NAME': 'jwt_db_3'
 
     }
 }
